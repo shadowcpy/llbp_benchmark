@@ -1,0 +1,14 @@
+[package]
+name = "llbp_benchmark"
+version = "0.1.0"
+edition = "2024"
+
+[dev-dependencies]
+divan = "0.1.21"
+
+[[bench]]
+name = "simple"
+harness = false
+
+[dependencies]
+rand = "0.9.1"
