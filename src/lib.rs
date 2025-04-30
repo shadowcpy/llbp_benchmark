@@ -1,10 +1,22 @@
-use std::process::Command;
+use std::{iter::repeat_with, process::Command};
 
-pub fn m5_fail() {
-    Command::new("/usr/local/bin/m5")
-        .arg("fail")
-        .arg("4")
+use rand::{
+    Rng,
+    distr::{Distribution, StandardUniform},
+};
+
+pub fn try_cmd<'s>(cmd: &str, args: impl IntoIterator<Item = &'s str>) {
+    Command::new(cmd)
+        .args(args)
         .spawn()
-        .inspect_err(|e| println!("failed to execute m5 magic instr: {e}"))
+        .inspect_err(|e| eprintln!("failed to run command '{cmd}': {e}"))
         .ok();
+}
+
+pub fn random_vec<T>(n: usize) -> Vec<T>
+where
+    StandardUniform: Distribution<T>,
+{
+    let mut rng = rand::rng();
+    repeat_with(|| rng.random()).take(n).collect()
 }
